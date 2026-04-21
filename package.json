@@ -1,0 +1,29 @@
+{
+  "name": "@agent-anatomy/agent",
+  "version": "0.1.0",
+  "description": "One config file for every AI coding agent.",
+  "bin": {
+    "agent-sync": "./sync.js"
+  },
+  "scripts": {
+    "sync": "node sync.js"
+  },
+  "keywords": [
+    "claude-code",
+    "cursor",
+    "codex",
+    "windsurf",
+    "copilot",
+    "aider",
+    "gemini",
+    "ai-agent",
+    "boilerplate",
+    "config"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agent-anatomy/agent.git"
+  },
+  "homepage": "https://github.com/agent-anatomy/agent"
+}

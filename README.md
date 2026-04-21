@@ -1,8 +1,8 @@
 # agent
 
-> One config file for every AI coding agent.
+> One config folder for every AI coding agent.
 
-Write `AGENT.md` once. Sync it to Claude Code, Cursor, Codex, Windsurf, Copilot, Aider, and Gemini CLI in one command.
+Write your project instructions once in `.agent/`. Sync to Claude Code, Cursor, Codex, Windsurf, Copilot, Aider, Gemini — in one command.
 
 Part of [agent-anatomy](https://github.com/agent-anatomy) — boilerplates for every AI coding agent.
 
@@ -14,7 +14,7 @@ Every AI coding agent reads from a different file:
 
 | Agent | Reads from |
 |-------|-----------|
-| Claude Code | `CLAUDE.md` |
+| Claude Code | `CLAUDE.md` + `.claude/` |
 | OpenAI Codex | `AGENTS.md` |
 | Gemini CLI | `GEMINI.md` |
 | Windsurf | `.windsurfrules` |
@@ -28,20 +28,49 @@ Same content. Seven files. One change = seven edits.
 
 ## The solution
 
-Write your project instructions once in `AGENT.md`. Sync everywhere.
+`.agent/` is the universal control center. One folder. Any agent.
+
+```
+.agent/
+├── agent.md                    ← main instructions (edit this)
+├── agent.local.md.example      → copy → agent.local.md (gitignored)
+├── settings.json               ← permissions + config
+├── settings.local.json.example → copy → settings.local.json (gitignored)
+├── commands/
+│   ├── review.md               ← review staged changes
+│   ├── fix-issue.md            ← fix a bug
+│   └── deploy.md               ← pre-deploy checklist
+├── rules/
+│   ├── code-style.md           ← coding conventions
+│   ├── testing.md              ← test rules
+│   └── api-conventions.md      ← API patterns
+└── agents/
+    ├── code-reviewer.md        ← strict review persona
+    └── security-auditor.md     ← security audit persona
+```
+
+---
+
+## Usage
 
 ```bash
-# 1. Copy AGENT.md into your project
-cp /path/to/agent/AGENT.md ./AGENT.md
+# 1. Clone into your project
+git clone https://github.com/agent-anatomy/agent .agent-boilerplate
+cp -r .agent-boilerplate/.agent ./.agent
+rm -rf .agent-boilerplate
 
-# 2. Edit it
-# (fill in your project description, stack, rules, commands)
+# 2. Edit .agent/agent.md — fill in your project details
 
 # 3. Sync to all agents
 npx @agent-anatomy/agent
 
-# or sync to specific agents only
-npx @agent-anatomy/agent claude cursor
+# Or sync to specific agents only
+npx @agent-anatomy/agent claude
+npx @agent-anatomy/agent cursor codex
+npx @agent-anatomy/agent windsurf copilot aider
+
+# Dry run — see what would be written without writing
+npx @agent-anatomy/agent --dry-run
 ```
 
 ---
@@ -58,64 +87,20 @@ GEMINI.md                          ← Gemini CLI
 CONVENTIONS.md                     ← Aider
 ```
 
-All files are plain copies of `AGENT.md`. Edit `AGENT.md`, re-run sync, done.
-
----
-
-## Usage
-
-```bash
-# Sync to all agents
-npx @agent-anatomy/agent
-
-# Sync to specific agents
-npx @agent-anatomy/agent claude
-npx @agent-anatomy/agent cursor codex
-npx @agent-anatomy/agent windsurf copilot aider
-```
-
-Or run locally without npx:
-
-```bash
-node sync.js
-node sync.js claude cursor
-```
-
----
-
-## What to put in AGENT.md
-
-```markdown
-# Project
-
-A TypeScript API that handles payments for SaaS customers.
-
-## Stack
-- Language: TypeScript
-- Framework: Express
-- Database: PostgreSQL
-
-## Commands
-npm install / npm run dev / npm test / npm run build
-
-## Rules
-- Follow existing code style
-- Write tests for all new functionality
-- Never modify files in generated/
-
-## Do not touch
-- generated/
-- *.lock files
-```
+All files are plain copies of `.agent/agent.md`. Edit once, sync everywhere.
 
 ---
 
 ## What to commit vs gitignore
 
-Commit `AGENT.md`. The generated files are optional to commit — your team can run sync locally.
+Commit `.agent/` (except local overrides). The generated files are optional.
 
 ```gitignore
-# Optional: ignore generated agent configs
+# personal overrides — never commit
+.agent/agent.local.md
+.agent/settings.local.json
+
+# optional: ignore generated agent configs if you prefer single source
 CLAUDE.md
 AGENTS.md
 GEMINI.md
@@ -125,19 +110,13 @@ GEMINI.md
 CONVENTIONS.md
 ```
 
-Or commit them all — either works.
-
 ---
 
-## Agent-specific config
+## Agent-specific features
 
-`AGENT.md` covers the universal 80%: project context, commands, rules.
+`.agent/` covers the universal 80%: project context, commands, rules, personas.
 
-For agent-specific features (Claude's `.claude/commands/`, Cursor's `.mdc` rule types, Aider's `.aider.conf.yml`) — use the individual boilerplates from [agent-anatomy](https://github.com/agent-anatomy).
-
----
-
-## Other agents
+For agent-specific features (Claude's `settings.json` permissions, Cursor's `.mdc` rule types, Aider's `.aider.conf.yml`) — use the individual boilerplates:
 
 | Agent | Full boilerplate |
 |-------|-----------------|
